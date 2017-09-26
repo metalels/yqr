@@ -1,0 +1,9 @@
+---
+- name: mike
+  kind: cat
+- name: pochi
+  kind: dog
+- name: buchi
+  kind: cat
+- name: koro
+  kind: dog

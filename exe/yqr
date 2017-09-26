@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+require 'yqr'
+require 'optparse'
+
+Version = Yqr::VERSION
+
+usage = <<-EOS
+YAML query executer.
+
+ usage: #{$0} [options] QUERY < YAML
+ options:
+EOS
+
+OptionParser.new do |opt|
+  opt.banner = usage
+  opt.on('--debug', 'Enable debug print') {|v| Yqr.options[:debug] = v}
+  args = opt.parse!(ARGV)
+  if args.length != 1
+    puts opt
+    exit
+  end
+  Yqr.options[:query] = args.pop
+end
+
+bodies = []
+while line = STDIN.gets
+  bodies << line
+end
+
+Yqr.load_str bodies.join("\n")
+puts Yqr.exec
