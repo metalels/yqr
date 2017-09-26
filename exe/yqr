@@ -13,6 +13,7 @@ EOS
 
 OptionParser.new do |opt|
   opt.banner = usage
+  opt.on('--json', 'Outpu Json format') {|v| Yqr.options[:json] = v}
   opt.on('--debug', 'Enable debug print') {|v| Yqr.options[:debug] = v}
   args = opt.parse!(ARGV)
   if args.length != 1
@@ -28,4 +29,4 @@ while line = STDIN.gets
 end
 
 Yqr.load_str bodies.join("\n")
-puts Yqr.exec
+puts Yqr.exec_with_format

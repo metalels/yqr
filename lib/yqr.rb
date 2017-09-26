@@ -3,7 +3,7 @@ require "yqr/version"
 
 module Yqr
   @yaml = nil
-  @options = {debug: false}
+  @options = {debug: false, json: false}
 
   class << self
     def yaml
@@ -33,8 +33,32 @@ module Yqr
 
       eval %Q{self.yaml#{parse_query}}
     rescue => ex
-      puts "Error was happen."
-      print ex.message
+      STDERR.puts "Error was happen."
+      STDERR.print ex.message
+    end
+
+    def exec_with_format
+      obj = exec
+      if debug
+        puts "==== Object Info ===="
+        puts obj.class
+        puts obj
+        puts "====================="
+      end
+      case obj.class.to_s
+      #when "String", "Integer", "Float", "NilClass", "Time", "Date", "DateTime"
+      #  obj
+      #else
+      when "Array", "Hash"
+        if @options[:json]
+          require 'json'
+          obj.to_json
+        else
+          obj.to_yaml
+        end
+      else
+        obj
+      end
     end
 
     def parse_query
