@@ -13,8 +13,9 @@ EOS
 
 OptionParser.new do |opt|
   opt.banner = usage
-  opt.on('--raw', 'Disable auto symborize keys.') {|v| Yqr.options[:symborize] = false}
-  opt.on('--json', 'Outpu Json format') {|v| Yqr.options[:json] = v}
+  opt.on('--nosymborize', 'Disable auto symborize keys.') {|v| Yqr.options[:symborize] = false}
+  opt.on('--json', 'Output Json format [low priority]') {|v| Yqr.options[:json] = v}
+  opt.on('--raw', 'Output raw(to_s) format [high priority]') {|v| Yqr.options[:raw] = v}
   opt.on('--debug', 'Enable debug print') {|v| Yqr.options[:debug] = v}
   args = opt.parse!(ARGV)
   if args.length != 1

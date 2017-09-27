@@ -3,7 +3,7 @@ require "yqr/version"
 
 module Yqr
   @yaml = nil
-  @options = {debug: false, json: false, symborize: true}
+  @options = {debug: false, json: false, symborize: true, raw: false}
 
   class << self
     def yaml
@@ -65,11 +65,12 @@ module Yqr
         puts obj
         puts "====================="
       end
-      case obj.class.to_s
-      #when "String", "Integer", "Float", "NilClass", "Time", "Date", "DateTime"
-      #  obj
-      #else
-      when "Array", "Hash"
+
+      if @options[:raw]
+        return raw_output_formatter(obj)
+      end
+
+      if obj.class.to_s == "Array" || obj.class.to_s == "Hash"
         if @options[:json]
           require 'json'
           obj.to_json
@@ -79,6 +80,10 @@ module Yqr
       else
         obj
       end
+    end
+
+    def raw_output_formatter(obj)
+      obj
     end
 
     def parse_query
