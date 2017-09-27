@@ -3,7 +3,7 @@ require "yqr/version"
 
 module Yqr
   @yaml = nil
-  @options = {debug: false, json: false}
+  @options = {debug: false, json: false, symborize: true}
 
   class << self
     def yaml
@@ -15,11 +15,31 @@ module Yqr
     end
 
     def load_str(str)
-      @yaml = YAML.load str
+      @yaml = symbolize_all_keys YAML.load(str)
     end
 
     def load_file(file)
-      @yaml = YAML.load_file file
+      @yaml = symbolize_all_keys YAML.load_file(file)
+    end
+
+    def symbolize_all_keys(obj)
+      unless enable_symborize
+        return obj
+      end
+      case obj.class.to_s
+      when 'Hash'
+        obj.keys.each do |key|
+          obj[(key.to_sym rescue key) || key] = symbolize_all_keys(obj.delete(key))
+        end
+        obj
+      when 'Array'
+        obj.map! do |elem|
+          symbolize_all_keys elem
+        end
+        obj
+      else
+        obj
+      end
     end
 
     def exec
@@ -62,7 +82,15 @@ module Yqr
     end
 
     def parse_query
-      @options[:query].gsub(/\[(\w*)\]/, '["\1"]').gsub(/\["(\d*)"\]/, '[\1]')
+      if enable_symborize
+        @options[:query].gsub(/\[(\w*)\]/, '[:\1]').gsub(/\[:(\d*)\]/, '[\1]')
+      else
+        @options[:query]
+      end
+    end
+
+    def enable_symborize
+      @options[:symborize]
     end
 
     def debug

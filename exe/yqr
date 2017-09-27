@@ -13,6 +13,7 @@ EOS
 
 OptionParser.new do |opt|
   opt.banner = usage
+  opt.on('--raw', 'Disable auto symborize keys.') {|v| Yqr.options[:symborize] = false}
   opt.on('--json', 'Outpu Json format') {|v| Yqr.options[:json] = v}
   opt.on('--debug', 'Enable debug print') {|v| Yqr.options[:debug] = v}
   args = opt.parse!(ARGV)
