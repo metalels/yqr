@@ -1,4 +1,5 @@
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](MIT-LICENSE)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](MIT-LICENSE)  
+[![Build Status](https://travis-ci.org/metalels/yqr.svg?branch=master)](https://travis-ci.org/metalels/yqr)  
 
 # Yqr
 Yaml query executer is written in ruby.
