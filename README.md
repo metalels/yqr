@@ -20,6 +20,10 @@ Or install it yourself as:
 
     $ gem install yqr
 
+## Installation (Option)
+
+By using [Hashie gem](https://rubygems.org/gems/hashie/) together, even simpler access becomes possible.
+
 ## Usage
 
 ```
@@ -32,7 +36,7 @@ dog:
 - pochi
 - koro
 
-$ cat example1.yaml | yqr [dog][0]
+$ yqr --file example1.yaml [dog][0]
 pochi
 
 $ cat example2.yaml
@@ -46,8 +50,43 @@ $ cat example2.yaml
 - name: koro
   kind: dog
 
-$ cat example2.yaml | yqr ".find{|a| a[kind] == 'dog'}[name]"
+$ yqr ".find{|a| a[kind] == 'dog'}[name]" < example2.yaml
 pochi
+
+$ cat example2.yaml | bundle exec yqr ".select{|a| a[kind] == 'cat'}.last[name]
+buchi
+```
+
+## Usage (Output-type)
+
+```
+# Default output type is yaml
+$ yqr --file example4.yaml "[cat].first"
+---
+:name: mike
+:sex: male
+
+# Raw output type (Object.to_s)
+$ yqr --file example4.yaml --raw "[cat].first"
+{:name=>"mike", :sex=>"male"}
+
+# Json output type
+$ yqr --file example4.yaml --json "[cat].first"
+{"name":"mike","sex":"male"}
+```
+
+### Enable Hashie access
+
+if you install [Hashie gem](https://rubygems.org/gems/hashie/), you can also use query as:
+
+```
+$ yqr --file example4.yaml ".cat.first"
+---
+:name: mike
+:sex: male
+
+$ yqr --file example4.yaml --raw ".cat.first"
+#<Hashie::Mash name="mike" sex="male">
 ```
 
 ## Contributing

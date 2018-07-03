@@ -9,3 +9,6 @@ before_install: gem install bundler --no-document
 cache: bundler
 script:
   - bundle exec rake spec
+  - echo "gem 'hashie'" >> Gemfile
+  - bundle
+  - bundle exec rake spec_with_hashie

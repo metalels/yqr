@@ -7,12 +7,17 @@ Version = Yqr::VERSION
 usage = <<-EOS
 YAML query executer.
 
- usage: #{$0} [options] QUERY < YAML
+ usage: yqr [options] --file YAML_FILE [options] QUERY
+          or can also use Input-redirect
+        yqr [options] QUERY < YAML_FILE
+          or can also use Pipe
+        cat YAML_FILE | yqr [options] QUERY
  options:
 EOS
 
 OptionParser.new do |opt|
   opt.banner = usage
+  opt.on('--file [VALUE]', 'Input Yaml file.') {|v| Yqr.options[:file] = v}
   opt.on('--nosymborize', 'Disable auto symborize keys.') {|v| Yqr.options[:symborize] = false}
   opt.on('--json', 'Output Json format [low priority]') {|v| Yqr.options[:json] = v}
   opt.on('--raw', 'Output raw(to_s) format [high priority]') {|v| Yqr.options[:raw] = v}
@@ -23,12 +28,15 @@ OptionParser.new do |opt|
     exit
   end
   Yqr.options[:query] = args.pop
+  unless Yqr.options[:file]
+    bodies = []
+    while line = STDIN.gets
+      bodies << line
+    end
+
+    Yqr.options[:body] = bodies.join("\n")
+  end
 end
 
-bodies = []
-while line = STDIN.gets
-  bodies << line
-end
 
-Yqr.load_str bodies.join("\n")
 puts Yqr.exec_with_format

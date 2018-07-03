@@ -1,0 +1,11 @@
+---
+cat:
+  - name: mike
+    sex: male
+  - name: buchi
+    sex: female
+dog:
+  - name: pochi
+    sex: male
+  - name: koro
+    sex: female
