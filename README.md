@@ -53,13 +53,21 @@ $ cat example2.yaml
 $ yqr ".find{|a| a[kind] == 'dog'}[name]" < example2.yaml
 pochi
 
-$ cat example2.yaml | bundle exec yqr ".select{|a| a[kind] == 'cat'}.last[name]
+$ cat example2.yaml | bundle exec yqr ".select{|a| a[kind] == 'cat'}.last[name]"
 buchi
 ```
 
 ## Usage (Output-type)
 
 ```
+$ cat example4.yaml
+---
+cat:
+  - name: mike
+    sex: male
+  - name: tama
+    sex: female
+
 # Default output type is yaml
 $ yqr --file example4.yaml "[cat].first"
 ---
